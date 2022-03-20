@@ -27,6 +27,14 @@ public class MainActivity extends AppCompatActivity {
         ThreadUtil.init();
     }
 
+    public void removeNlu(View view) {
+        asrEngine.removeTopic();
+    }
+
+    public void removeInterceptor(View view) {
+        asrEngine.removeInterceptor();
+    }
+
     public void startVoice(View view) {
         frontEngine.sendAwake();
         SystemClock.sleep(100);

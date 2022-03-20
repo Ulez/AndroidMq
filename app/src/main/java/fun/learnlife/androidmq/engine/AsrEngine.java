@@ -11,15 +11,32 @@ import fun.learnlife.mqlibrary.Protocol;
 public class AsrEngine {
     private static final String TAG = "AsrEngine";
     private Agent agent;
+    HCallBack.ISubscriber subscriber= new HCallBack.ISubscriber() {
+        @Override
+        public void onReceive(String topic, Object... extras) {
+            Log.e(TAG, "receive,topic = " + topic + ", extras = " + Arrays.toString(extras));
+        }
+    };
 
     public AsrEngine(Agent agent) {
         this.agent = agent;
-        agent.subscribe(new HCallBack.ISubscriber() {
+        agent.subscribe(subscriber, new String[]{Protocol.wake});
+
+        agent.addInterceptor(new HCallBack.IInterceptor() {
             @Override
-            public void onReceive(String topic, Object... extras) {
-                Log.e(TAG, "receive,topic = " + topic + ", extras = " + Arrays.toString(extras));
+            public Object[] beforeReceive(String topic, Object... extras) {
+                extras[0] = "加工后的呀:" + extras[0];
+                return extras;
             }
-        }, new String[]{Protocol.wake});
+        }, Protocol.nlu);
+    }
+
+    public void removeInterceptor(){
+        agent.removeInterceptor(Protocol.nlu);
+    }
+
+    public void removeTopic(){
+        agent.unsubscribe(new String[]{Protocol.wake},subscriber);
     }
 
     public void sendAsr() {

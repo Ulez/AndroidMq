@@ -41,4 +41,14 @@ public class Agent {
         Message.obtain(handler, HCallBack.WHAT_UNSUBSCRIBE, new Op(topics, listener)).sendToTarget();
     }
 
+    public void addInterceptor(HCallBack.IInterceptor interceptor, String topic) {
+        Log.i(TAG, "addInterceptor,topic = " + interceptor + ", interceptor = " + interceptor);
+        Message.obtain(handler, HCallBack.WHAT_SUBSCRIBE_INTERCEPTOR, new Op(topic, interceptor)).sendToTarget();
+    }
+
+    public void removeInterceptor(String topic) {
+        Log.i(TAG, "removeInterceptor,topic = " + topic);
+        Message.obtain(handler, HCallBack.WHAT_UNSUBSCRIBE_INTERCEPTOR, new Op(topic)).sendToTarget();
+    }
+
 }
