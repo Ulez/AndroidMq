@@ -2,16 +2,21 @@ package fun.learnlife.mqlibrary;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import fun.learnlife.ThreadUtil;
 
 public class HCallBack implements Handler.Callback {
+    private static final String TAG = "HCallBack";
     private HashMap<String, Set<ISubscriber>> subscribers = new HashMap();
     private HashMap<String, IInterceptor> interceptors = new HashMap();
     public static final int WHAT_SUBSCRIBE = 1001;
@@ -76,9 +81,15 @@ public class HCallBack implements Handler.Callback {
                 tasks.add(new Task(iterator.next(), topic, extras));
             }
             try {
-                ThreadUtil.publishInvokeAll(tasks);
+                List<Future<Boolean>> futures = ThreadUtil.publishInvokeAll(tasks);
+                for (Future f : futures) {
+                    f.get();
+                }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e(TAG, "InterruptedException = " + e.getMessage());
+            } catch (ExecutionException e) {
+                Log.e(TAG, "error = " + e.getMessage());
+                throw new RuntimeException(e);
             }
         }
     }
