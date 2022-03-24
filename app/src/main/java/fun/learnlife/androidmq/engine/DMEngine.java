@@ -23,6 +23,6 @@ public class DMEngine {
     }
 
     public void sendSessionEnd() {
-        agent.publish(Protocol.session_end, "一轮对话结束了。。。");
+        agent.publish(Protocol.session_end, new String[]{"一轮对话结束了。。。"});
     }
 }

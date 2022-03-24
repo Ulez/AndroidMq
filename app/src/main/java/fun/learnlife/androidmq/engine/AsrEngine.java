@@ -40,7 +40,7 @@ public class AsrEngine {
     }
 
     public void sendAsr() {
-        agent.publish(Protocol.asr, "asr:我是大聪明", false);
+        agent.publish(Protocol.asr, new String[]{"asr:我是大聪明"});
     }
 
     public void sendNlu() {

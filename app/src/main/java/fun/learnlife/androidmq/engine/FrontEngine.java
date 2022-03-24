@@ -23,7 +23,7 @@ public class FrontEngine {
     }
 
     public void sendAwake() {
-        agent.publish(Protocol.wake, "唤醒了。。。");
+        agent.publish(Protocol.wake, new String[]{"唤醒了。。。from voice", "from voice message"});
     }
 
     public void sendVadStart() {
